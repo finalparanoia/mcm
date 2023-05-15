@@ -270,6 +270,15 @@ async def task_create_api(token: str = Depends(oauth2_scheme)):
         exp()
 
 
+@app.get("/level/")
+async def get_level_api(token: str = Depends(oauth2_scheme)):
+    resp_bool, username = verify_token(token)
+    if resp_bool:
+        return {"admin": ua.verify_admin(username)}
+    else:
+        exp()
+
+
 if __name__ == "__main__":
     from uvicorn import run
     run(app="main:app", port=8000, host="::", workers=4)

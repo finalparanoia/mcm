@@ -25,13 +25,9 @@ class UserDB(BaseModel):
     # 站点
     site: str
     # 人员唯一标识
-    uuid: str
+    username: str
     # 密码hash盐
-    salt: str
-    # 密码加盐hash
-    pwd: str
-    # 权限
-    pms: str
+    pwd: list
     # 姓名
     name: str
     # 邮箱

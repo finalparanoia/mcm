@@ -11,25 +11,29 @@ class UserAuth:
         self.lib = Libs()
 
     def test(self):
+        dict_data = {
+            "staff": "d",
+            "admin": "a"
+        }
         success = 0
         for item in ["staff", "admin"]:
             profile = {
+                "site": "test",
                 "username": item,
+                # 密码
+                "pwd": self.lib.salt_hash(token_hex(), item),
                 # 姓名
                 "name": item,
-                # 密码
-                "pwd": item,
                 # 邮箱
                 "email": item+"@"+item+"."+item,
                 # 电话
                 "phone": item,
-                "level": "a"
+                "level": dict_data[item]
             }
-            u = RegUser.parse_obj(profile)
-
+            u = UserDB.parse_obj(profile)
             if self.db.create("user", "auth", [u.dict()]):
                 success += 1
-        if success == 3:
+        if success == 2:
             return True, "test_account generate process complete without err"
         else:
             return False, ""
@@ -48,6 +52,7 @@ class UserAuth:
             profile["level"] = "d"
         pwd = self.lib.salt_hash(token_hex(), profile["pwd"])
         profile["pwd"] = pwd
+        print(profile)
         u = UserDB.parse_obj(profile)
         if self.db.create("user", "auth", [u.dict()]):
             return True, uuid
